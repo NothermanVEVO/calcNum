@@ -23,6 +23,13 @@ import net.objecthunter.exp4j.function.Function;
  *  cos (2x + 3) - 2x * sin(2x + 3)      <- funcao derivada
  */
 
+/*
+ * TESTAR METODO DAS SECANTES
+ *  [0.5, 1.0]                           <- intervalo
+ *  x^3 - 9x + 5                         <- funcao normal
+ *  
+ */
+
 public class Main{
 
     static Scanner scanner = new Scanner(System.in);
@@ -81,6 +88,7 @@ public class Main{
     }
 
     public static String options(){
+        System.out.println("--------------------------------------------------------------------------------");
         System.out.println("Escolha o que deseja fazer: ");
         System.out.println("1) Definir funcao");
         System.out.println("2) Escolher metodo");
@@ -193,6 +201,8 @@ public class Main{
         boolean functionAIsNegative;
         boolean functionXIsNegative;
 
+        int i = 1;
+
         while (true) {
 
             System.out.println("Intervalo [" + a + ", " + b + "]");
@@ -250,6 +260,12 @@ public class Main{
                 break;
             }
 
+            i++;
+
+            if (i > 20) {
+                break;
+            }
+
         }
 
     }
@@ -301,11 +317,11 @@ public class Main{
 
             System.out.println("--------------------------------------------------------------------------------");
 
-            i++;
-
             if(Math.abs(fX) <= erro){
                 break;
             }
+
+            i++;
 
             if (i > 20) {
                 break;
@@ -318,6 +334,64 @@ public class Main{
         if(function.isBlank()){
             getFunction();
         }
+
+        System.out.println("No intervalo [a, b],");
+        System.out.print("Entre com o valor a: ");
+        double a = scanner.nextDouble();
+        scanner.nextLine();
+        System.out.print("Entre com o valor b: ");
+        double b = scanner.nextDouble();
+        scanner.nextLine();
+
+        System.out.print("O erro devera ser inferior a (Entre com o valor em decimal): ");
+
+        double erro = scanner.nextDouble();
+        scanner.nextLine();
+
+        System.out.println("--------------------------------------------------------------------------------");
+
+        int i = 1;
+
+        while (true) {
+
+            double fXAnterior = calculateFunction(a);
+            
+            double fXAtual = calculateFunction(b);
+
+            System.out.println("f(x" + (i - 1) + ") = " + fXAnterior);
+
+            System.out.println("f(x" + i + ") = " + fXAtual);
+
+            System.out.println("--------------------------------------------------------------------------------");
+
+            System.out.println("x" + (i + 1) + " = ((" + fXAtual + " * (" + b + " - " + a + ")) / (" + fXAtual + " - " + fXAnterior + "))");
+
+            double x = b - ((fXAtual * (b - a)) / (fXAtual - fXAnterior));
+
+            double fX = calculateFunction(x);
+
+            System.out.println("x" + (i + 1) + " = " + x);
+
+            System.out.println("f(" + x + ") = " + fX);
+
+            System.out.println("--------------------------------------------------------------------------------");
+
+            a = b;
+
+            b = x;
+
+            if(Math.abs(fX) <= erro){
+                break;
+            }
+
+            i++;
+
+            if (i > 20) {
+                break;
+            }
+
+        }
+
     }
 
 }
