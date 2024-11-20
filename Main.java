@@ -5,22 +5,36 @@ import net.objecthunter.exp4j.ExpressionBuilder;
 import net.objecthunter.exp4j.ValidationResult;
 import net.objecthunter.exp4j.function.Function;
 
+/*
+ * Recomendado usar no VSCODE, caso contrario, vai ter que fazer um arquivo pox.xml para adicionar a dependencia Exp4J.
+ * O Exp4J apenas calcula expressoes matematicas.
+ */
+
+/*
+ * TESTAR METODO DE BISSECCAO
+ *  [0.1, 1.0]                           <- intervalo
+ *  ln((x^3) + x) + cos(x)               <- funcao normal
+ */
+
+/*
+ * TESTAR METODO DE NEWTON
+ *  x0 = 1                               <- valor inicial
+ *  xcos(2x + 3)                         <- funcao normal
+ *  cos (2x + 3) - 2x * sin(2x + 3)      <- funcao derivada
+ */
+
 public class Main{
 
     static Scanner scanner = new Scanner(System.in);
 
     static String function = "";
+    static String derivedFunction = "";
 
     static Function ln;
-    
-    // TESTAR METODO DE BISSECCAO, INTERVALO [0.1, 1.0]
-    // ln((x^3) + x) + cos(x)
 
         public static void main(String[] args) {
-            // System.out.println(MathExp.compile("2^-x + ln 3.14159 + (-1 + -3.2 + .2)"));
-            // System.out.println(MathExp.func("2^2 / (2 + |-2|)"));
-            // System.out.println(MathExp.func("2^sin2 / (2 + |-2|)       (| (  ) |) ||"));
     
+            // Adicionar ln no exp4j
             ln = new Function("ln", 1) { // '1' indica que a função aceita um argumento
             @Override
             public double apply(double... args) {
@@ -145,10 +159,15 @@ public class Main{
 
     public static double calculateFunction(double x){
 
-        // Use a biblioteca Exp4j para interpretar e resolver
         Expression expression = new ExpressionBuilder(function).function(ln).variable("x").build().setVariable("x", x);
 
-        // Avalie a expressão
+        return expression.evaluate();
+    }
+
+    public static double calculateDerivedFunction(double x){
+
+        Expression expression = new ExpressionBuilder(derivedFunction).function(ln).variable("x").build().setVariable("x", x);
+
         return expression.evaluate();
     }
 
@@ -169,12 +188,16 @@ public class Main{
         double erro = scanner.nextDouble();
         scanner.nextLine();
 
+        System.out.println("--------------------------------------------------------------------------------");
+
         boolean functionAIsNegative;
         boolean functionXIsNegative;
 
         while (true) {
 
             System.out.println("Intervalo [" + a + ", " + b + "]");
+
+            System.out.println();
 
             double fA = calculateFunction(a);
 
@@ -185,6 +208,8 @@ public class Main{
             double fB = calculateFunction(b);
             
             System.out.println("f(" + b + ") = " + fB);
+
+            System.out.println();
             
             if(fA * fB > 0f){
                 System.out.println("Fim! f(a) * f(b) > 0 !");
@@ -195,11 +220,15 @@ public class Main{
 
             double x = (a + b) / 2;
 
+            System.out.println("--------------------------------------------------------------------------------");
+
             System.out.println("X = " + x);
 
             double fX = calculateFunction(x);
 
             System.out.println("f(" + x + ") = " + fX);
+
+            System.out.println("--------------------------------------------------------------------------------");
 
             functionXIsNegative = fX < 0f ? true : false;
 
@@ -229,6 +258,60 @@ public class Main{
         if(function.isBlank()){
             getFunction();
         }
+
+        System.out.print("Entre com a funcao derivada: ");
+
+        derivedFunction = scanner.nextLine().toLowerCase();
+
+        System.out.print("Entre com o x0: ");
+
+        double x = scanner.nextDouble();
+        scanner.nextLine();
+
+        System.out.print("O erro devera ser inferior a (Entre com o valor em decimal): ");
+
+        double erro = scanner.nextDouble();
+        scanner.nextLine();
+
+        System.out.println("--------------------------------------------------------------------------------");
+
+        int i = 1;
+
+        while (true) {
+
+            double fX = calculateFunction(x);
+
+            System.out.println("f(" + x + ") = " + fX);
+
+            System.out.println();
+
+            double fLX = calculateDerivedFunction(fX);
+
+            System.out.println("f'(" + x + ") = " + fLX);
+
+            System.out.println();
+
+            System.out.println("x" + i + " = " + x + " - (" + fX + " / " + fLX + ")");
+
+            x = x - (fX / fLX);
+
+            System.out.println("--------------------------------------------------------------------------------");
+
+            System.out.println("x" + i + " = " + x);
+
+            System.out.println("--------------------------------------------------------------------------------");
+
+            i++;
+
+            if(Math.abs(fX) <= erro){
+                break;
+            }
+
+            if (i > 20) {
+                break;
+            }
+        }
+
     }
 
     public static void secantes(){

@@ -1,6 +1,10 @@
-import java.util.ArrayList;
+// import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+/*
+ * IGNORA ISSO, ESTAVA TENTANDO FAZER UM NEGOCIO PROPRIO PARA CALCULAR EXPRESSOES MATEMATICAS
+ */
 
 public class MathExp {
 
@@ -35,7 +39,7 @@ public class MathExp {
     private static final String FAT = "(!)";
 
     private static final String LEFT_BRACKET = "(\\()";
-    private static final String RIGHT_BRACKET = "(\\))";
+    // private static final String RIGHT_BRACKET = "(\\))";
     private static final String MODULE = "(\\|)";
 
     private static final String PI = ("(PI|pi)");
@@ -58,7 +62,7 @@ public class MathExp {
 
         String[] splitCompiled = exp.split(" ");
         
-        ArrayList<String> splitNotCompiled = new ArrayList<>();
+        // ArrayList<String> splitNotCompiled = new ArrayList<>();
 
         for (String str : splitCompiled) {
             switch (str) {
@@ -75,9 +79,9 @@ public class MathExp {
         return "";
     }
 
-    private String correctSpaces(String string){
-        return null;
-    }
+    // private String correctSpaces(String string){
+    //     return null;
+    // }
 
     private static String organizeString(String string){
         String org = removeEmptyBracketsNORModule(string);
