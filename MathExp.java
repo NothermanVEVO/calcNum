@@ -1,3 +1,7 @@
+import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class MathExp {
 
     private static final String REGEX_N_SPACE = "\\s+";
@@ -38,14 +42,41 @@ public class MathExp {
     private static final String EPS = "(E|e)";
 
     public static String func(String string){
+
+        Pattern pattern = Pattern.compile(REGEX_DECIMAL);
+        
+        Matcher matcher = pattern.matcher(string);
+
+        string = matcher.replaceAll(match -> match.group() + " ");
+
         String exp = compile(string);
         if(!isBalanced(exp)){
             System.out.println(exp);
             System.out.println("Not balanced");
             return null;
         }
+
+        String[] splitCompiled = exp.split(" ");
+        
+        ArrayList<String> splitNotCompiled = new ArrayList<>();
+
+        for (String str : splitCompiled) {
+            switch (str) {
+                case "(":
+                    
+                    break;
+            
+                default:
+                    break;
+            }
+        }
+
         System.out.println(exp);
         return "";
+    }
+
+    private String correctSpaces(String string){
+        return null;
     }
 
     private static String organizeString(String string){
